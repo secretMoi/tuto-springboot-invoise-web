@@ -1,25 +1,22 @@
 package com.mycompany.invoise.invoiseweb.controller;
 
 
-import com.mycompany.invoise.core.repository.controller.IInvoiceController;
-import com.mycompany.invoise.core.repository.model.Invoice;
-import com.mycompany.invoise.core.repository.service.IInvoiceService;
+import com.mycompany.invoise.core.controller.IInvoiceController;
+import com.mycompany.invoise.core.model.Invoice;
+import com.mycompany.invoise.core.service.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/invoice")
 public class InvoiceControllerWeb implements IInvoiceController {
 
     @Autowired
     private IInvoiceService invoiceService;
-
-    public IInvoiceService getInvoiceService() {
-        return invoiceService;
-    }
 
     public void setInvoiceService(IInvoiceService invoiceService) {
         this.invoiceService = invoiceService;
@@ -34,10 +31,19 @@ public class InvoiceControllerWeb implements IInvoiceController {
         invoiceService.createInvoice(invoice);
     }
 
-    @RequestMapping("invoice-home")
-    public @ModelAttribute("invoices") List<Invoice> displayHome() {
-        System.out.println("methode appelée!");
+    @RequestMapping("/home")
+    public String displayHome(Model model) {
 
-        return invoiceService.getInvoiceList();
+        model.addAttribute("invoices", invoiceService.getInvoiceList());
+
+        return "invoice-home";
+    }
+
+    @RequestMapping("/{id}")
+    public String displayInvoice(@PathVariable("id") String number, Model model) {
+
+        model.addAttribute("invoice", invoiceService.getInvoiceByNumber(number));
+
+        return "invoice-details";
     }
 }
