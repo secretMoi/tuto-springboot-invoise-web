@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:action="@{/invoice}" method="post" th:object="${invoice}">
+<form th:action="@{/invoice}" method="post" th:object="${invoiceForm}">
 
     <p>Customer name <input type="text" th:field="*{customerName}" /></p>
     <p>Order number <input type="text" th:field="*{orderNumber}" /></p>
